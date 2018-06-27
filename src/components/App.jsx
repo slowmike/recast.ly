@@ -1,10 +1,10 @@
 class App extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       videos: window.exampleVideoData,
       currentVideo: window.exampleVideoData[0]
-    }
+    };
     // this.handleButtonClick = this.handleButtonClick.bind(this);
   }
   handleButtonClick(event) {
@@ -14,7 +14,6 @@ class App extends React.Component {
 
   handleTitleClick(video) {
     this.setState({currentVideo: video});
-    console.log(video);
   }
 
   render() {
