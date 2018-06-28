@@ -15,9 +15,12 @@ class App extends React.Component {
     }) );
   }
 
-  handleSearchClick(input) {
-    // event.preventDefault();
-    console.log(input);
+  handleSearchInput(input) {
+    var options = {query: input, max: 5, key: window.YOUTUBE_API_KEY};
+    window.searchYouTube( options, (data) => this.setState({
+      videos: data,
+      currentVideo: data[0]
+    }) );
   }
 
   handleTitleClick(video) {
@@ -29,7 +32,7 @@ class App extends React.Component {
       <div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            <div> <Search videos={this.state.videos} onClick={this.handleSearchClick.bind(this)} /></div>
+            <div> <Search videos={this.state.videos} onInput={this.handleSearchInput.bind(this)} /></div>
           </div>
         </nav>
         <div className="row">
