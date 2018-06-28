@@ -7,6 +7,11 @@ class App extends React.Component {
     };
     // this.handleButtonClick = this.handleButtonClick.bind(this);
   }
+  componentDidMount() {
+    var options = {query: 'backbone js', max: 5, key: window.YOUTUBE_API_KEY};
+    this.setState({videos: window.searchYouTube(options, (data) => data )});
+  }
+
   handleSearchClick(input) {
     // event.preventDefault();
     console.log(input);
