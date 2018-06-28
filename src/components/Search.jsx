@@ -8,7 +8,7 @@ class Search extends React.Component {
 
   handleSearchInput(e) {
     this.props.onInput(this.state.inputValue);
-    if(e.keyCode === 13) {
+    if (e.keyCode === 13) {
       this.handleSearchClick();
     }
   }
