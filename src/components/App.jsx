@@ -7,9 +7,9 @@ class App extends React.Component {
     };
     // this.handleButtonClick = this.handleButtonClick.bind(this);
   }
-  handleButtonClick(event) {
-    event.preventDefault();
-    console.log('clicked');
+  handleSearchClick(input) {
+    // event.preventDefault();
+    console.log(input);
   }
 
   handleTitleClick(video) {
@@ -21,7 +21,7 @@ class App extends React.Component {
       <div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            <div> <Search videos={this.state.videos} onClick={() => this.handleButtonClick(event)}/></div>
+            <div> <Search videos={this.state.videos} onClick={this.handleSearchClick.bind(this)} /></div>
           </div>
         </nav>
         <div className="row">
@@ -29,7 +29,7 @@ class App extends React.Component {
             <div> <VideoPlayer video={this.state.currentVideo} /></div>
           </div>
           <div className="col-md-5">
-            <div> <VideoList videos= {this.state.videos} onClicky={this.handleTitleClick.bind(this)} /></div>
+            <div> <VideoList videos= {this.state.videos} onClick={this.handleTitleClick.bind(this)} /></div>
           </div>
         </div>
       </div>
