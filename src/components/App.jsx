@@ -3,24 +3,29 @@ class App extends React.Component {
     super(props);
     this.state = {
       videos: window.exampleVideoData,
-      currentVideo: window.exampleVideoData[0]
+      currentVideo: window.exampleVideoData[0],
+      throttled: false
     };
-    // this.handleButtonClick = this.handleButtonClick.bind(this);
+    window.setInterval(() => this.setState({throttled: false}), 1000);
   }
-  componentDidMount() {
-    var options = {query: 'rick astley', max: 5, key: window.YOUTUBE_API_KEY};
-    window.searchYouTube( options, (data) => this.setState({
+  componentWillMount() {
+    var options = {query: 'react js', max: 5, key: window.YOUTUBE_API_KEY};
+    this.props.searchYouTube( options, (data) => this.setState({
       videos: data,
       currentVideo: data[0]
     }) );
   }
 
   handleSearchInput(input) {
-    var options = {query: input, max: 5, key: window.YOUTUBE_API_KEY};
-    window.searchYouTube( options, (data) => this.setState({
-      videos: data,
-      currentVideo: data[0]
-    }) );
+    if(!this.state.throttled) {
+      console.log(this.state.throttled);
+      var options = {query: input, max: 5, key: window.YOUTUBE_API_KEY};
+      this.props.searchYouTube( options, (data) => this.setState({
+        videos: data,
+        currentVideo: data[0]
+      }) );
+      this.setState({throttled: true});
+    }
   }
 
   handleTitleClick(video) {
