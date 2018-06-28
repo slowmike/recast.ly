@@ -4,28 +4,46 @@ class App extends React.Component {
     this.state = {
       videos: window.exampleVideoData,
       currentVideo: window.exampleVideoData[0],
-      throttled: false
+      throttled: false,
+      inputValue: '',
+      evtValue: ''
     };
     window.setInterval(() => this.setState({throttled: false}), 1000);
   }
   componentWillMount() {
-    var options = {query: 'react js', max: 5, key: window.YOUTUBE_API_KEY};
+    var options = {query: this.state.inputValue, max: 5, key: window.YOUTUBE_API_KEY};
     this.props.searchYouTube( options, (data) => this.setState({
       videos: data,
       currentVideo: data[0]
     }) );
   }
+  // changeInput(value) {
+  //   this.setState({inputValue: this.state.inputValue + value})
+  // }
+  handleChange(event) {
+    this.setState({inputValue: event.target.value});
+    if (event.keyCode === 13) {
+      this.handleSearchInput(this.state.inputValue);
+      this.setState({inputValue: ''});
+      event.target.value = '';
+    } else if (event.type === 'click') {
+      this.handleSearchInput(this.state.inputValue);
+      $('.form-control').val('');
+    } else {
+      if (!this.state.throttled) {
+        this.handleSearchInput(this.state.inputValue);
+        this.setState({throttled: true});
+        this.setState({evtValue: event});
+      }
+    }
+  }
 
   handleSearchInput(input) {
-    if (!this.state.throttled) {
-      console.log(this.state.throttled);
-      var options = {query: input, max: 5, key: window.YOUTUBE_API_KEY};
-      this.props.searchYouTube( options, (data) => this.setState({
-        videos: data,
-        currentVideo: data[0]
-      }) );
-      this.setState({throttled: true});
-    }
+    var options = {query: input, max: 5, key: window.YOUTUBE_API_KEY};
+    this.props.searchYouTube( options, (data) => this.setState({
+      videos: data,
+      currentVideo: data[0]
+    }) );
   }
 
   handleTitleClick(video) {
@@ -37,7 +55,7 @@ class App extends React.Component {
       <div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            <div> <Search videos={this.state.videos} onInput={this.handleSearchInput.bind(this)} /></div>
+            <div> <Search videos={this.state.videos} catchChange={this.handleChange.bind(this)} onSearch={(event) => this.handleChange(event)} inputValue={this.state.inputValue}/></div>
           </div>
         </nav>
         <div className="row">
