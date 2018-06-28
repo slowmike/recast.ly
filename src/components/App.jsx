@@ -17,7 +17,7 @@ class App extends React.Component {
   }
 
   handleSearchInput(input) {
-    if(!this.state.throttled) {
+    if (!this.state.throttled) {
       console.log(this.state.throttled);
       var options = {query: input, max: 5, key: window.YOUTUBE_API_KEY};
       this.props.searchYouTube( options, (data) => this.setState({
