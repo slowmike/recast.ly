@@ -9,8 +9,10 @@ class App extends React.Component {
   }
   componentDidMount() {
     var options = {query: 'rick astley', max: 5, key: window.YOUTUBE_API_KEY};
-    window.searchYouTube( options, (data) => this.setState({videos: data,
-    currentVideo: data[0] }) );
+    window.searchYouTube( options, (data) => this.setState({
+      videos: data,
+      currentVideo: data[0]
+    }) );
   }
 
   handleSearchClick(input) {
