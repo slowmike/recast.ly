@@ -1,8 +1,13 @@
 var VideoList = (props) => (
-  <div className="video-list">
-    {props.videos.map(video =>
-      <VideoListEntry video={video} onClick={props.onClick} key={video.id.videoId} />
-    )}
+  <div>
+    <div className="video-list">
+      {props.videos.map(video =>
+        <VideoListEntry video={video} onClick={props.onClick} key={video.id.videoId} />
+      )}
+    </div>
+    <div>
+      <button className ="next-page" onClick={props.nextPage}>Next Page</button>
+    </div>
   </div>
 );
 

@@ -6,44 +6,51 @@ class App extends React.Component {
       currentVideo: window.exampleVideoData[0],
       throttled: false,
       inputValue: '',
-      evtValue: ''
+      evtTarget: '',
+      nextPage: ''
     };
-    window.setInterval(() => this.setState({throttled: false}), 1000);
+    window.setInterval(() => this.setState({throttled: false}), 500);
   }
   componentWillMount() {
-    var options = {query: this.state.inputValue, max: 5, key: window.YOUTUBE_API_KEY};
+    var options = {query: this.state.inputValue, max: 5, key: window.YOUTUBE_API_KEY };
     this.props.searchYouTube( options, (data) => this.setState({
-      videos: data,
-      currentVideo: data[0]
+      videos: data.items,
+      currentVideo: data.items[0],
+      nextPage: data.nextPageToken
     }) );
   }
   // changeInput(value) {
   //   this.setState({inputValue: this.state.inputValue + value})
   // }
   handleChange(event) {
+    var options = {query: input, max: 5, key: window.YOUTUBE_API_KEY};
     this.setState({inputValue: event.target.value});
     if (event.keyCode === 13) {
-      this.handleSearchInput(this.state.inputValue);
-      this.setState({inputValue: ''});
+      this.handleSearchInput(event.target.value, options);
       event.target.value = '';
     } else if (event.type === 'click') {
-      this.handleSearchInput(this.state.inputValue);
-      $('.form-control').val('');
+      this.handleSearchInput(this.state.evtTarget.value, options);
+      this.state.evtTarget.value = '';
     } else {
       if (!this.state.throttled) {
-        this.handleSearchInput(this.state.inputValue);
+        this.handleSearchInput(event.target.value, options);
         this.setState({throttled: true});
-        this.setState({evtValue: event});
+        this.setState({evtTarget: event.target});
       }
     }
   }
 
-  handleSearchInput(input) {
-    var options = {query: input, max: 5, key: window.YOUTUBE_API_KEY};
+  handleSearchInput(input, options) {
     this.props.searchYouTube( options, (data) => this.setState({
-      videos: data,
-      currentVideo: data[0]
+      videos: data.items,
+      currentVideo: data.items[0],
+      nextPage: data.nextPageToken
     }) );
+  }
+
+  handleNextPage() {
+    var options = {query: this.state.inputValue, max: 5, key: window.YOUTUBE_API_KEY, pageToken: this.state.nextPage};
+    this.handleSearchInput(this.state.inputValue, options);
   }
 
   handleTitleClick(video) {
@@ -63,7 +70,7 @@ class App extends React.Component {
             <div> <VideoPlayer video={this.state.currentVideo} /></div>
           </div>
           <div className="col-md-5">
-            <div> <VideoList videos= {this.state.videos} onClick={this.handleTitleClick.bind(this)} /></div>
+            <div> <VideoList videos= {this.state.videos} onClick={this.handleTitleClick.bind(this)} nextPage={this.handleNextPage.bind(this)} /></div>
           </div>
         </div>
       </div>
